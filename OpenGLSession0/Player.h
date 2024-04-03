@@ -34,6 +34,7 @@ std::array<Vertex, 48> mHouseVertecies;
 	glm::vec3 position;
 	float r, g, b;
 	glm::vec3 velocity;
+	glm::vec3 PointPosition;
 	float sphere_radius = 0;
 	bool up = true;
 	bool down = true;
@@ -94,7 +95,8 @@ std::array<Vertex, 48> mHouseVertecies;
 		}
 		else if (figure == 4) {
 
-			mPlaneVertecies = con.Plane(glm::vec3(red, green, blue));
+			PointPosition = glm::vec3(2.6f, -6.0f, 0.5f);
+			mPlaneVertecies = con.Plane(glm::vec3(red, green, blue), PointPosition);
 
 			VAO5.Bind();
 			VBO1.Bind();

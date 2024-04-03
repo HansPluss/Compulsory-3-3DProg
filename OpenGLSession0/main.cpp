@@ -166,13 +166,13 @@ int main()
 		//Set render distance and FOV
 		glm::mat4 viewproj= camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, myPlayer.position);
-		//glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj*model));
-		//myPlayer.BindVAO();
-		//myPlayer.GetVBO().Bind();
-		//glDrawArrays(GL_TRIANGLES, 0, myPlayer.mVertecies.size());
-		//myPlayer.UnbindVAO();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, myPlayer.position);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj*model));
+		myPlayer.BindVAO();
+		myPlayer.GetVBO().Bind();
+		glDrawArrays(GL_TRIANGLES, 0, myPlayer.mVertecies.size());
+		myPlayer.UnbindVAO();
 
 		//// Drawing door in room
 		//glm::mat4 roomDmodel = glm::mat4(1.0f);
@@ -243,7 +243,7 @@ int main()
 		// Drawing trophies
 		glm::mat4 PokalModel[maxPokals];
 
-		for (int i = 0; i < maxPokals; ++i)
+		/*for (int i = 0; i < maxPokals; ++i)
 		{
 			PokalModel[i] = glm::mat4(1.0f);
 			PokalModel[i] = glm::translate(PokalModel[i], myPokaler[i].position);
@@ -252,7 +252,7 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, myPokaler[i].mVertecies.size());
 			myPokaler[i].UnbindVAO();
 
-		}
+		}*/
 
 
 		
@@ -285,7 +285,7 @@ int main()
 			//makes door have collition with table
 		}
 
-		
+		myPlayer.position = floor.PointPosition;
 
 		for (int i = 0; i < maxPokals; ++i) {
 			if (myPokaler[i].CheckCollision(myPlayer) || myPlayer.CheckCollision(myPokaler[i])) {

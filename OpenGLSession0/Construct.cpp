@@ -171,54 +171,76 @@ std::array<Vertex, 48> Construct::House(glm::vec3 Color)
     return houseArray;
 }
 
-std::array<Vertex, 6> Construct::Plane(glm::vec3 Color)
+std::array<Vertex, 6> Construct::Plane(glm::vec3 Color, glm::vec3 PointPosition)
 {
     std::array<Vertex, 6> PlaneArray;
-    glm::vec3 sizeXYZ = glm::vec3(10.f, 10.f, 10.f);
-    glm::vec3 pointPosition = glm::vec3(sizeXYZ.x/4, sizeXYZ.x/2, 0);
-
+    glm::vec3 sizeXYZ = glm::vec3(10.0f, 10.0f, 10.0f);
+   
+      //  = glm::vec3(sizeXYZ.x / 4, sizeXYZ.x / 2, 0);
     Vertex v2{ sizeXYZ.x, sizeXYZ.y, sizeXYZ.z , Color.x, Color.y, Color.z };
     Vertex v3{ -sizeXYZ.x, sizeXYZ.y, sizeXYZ.z ,  Color.x, Color.y, Color.z };
     Vertex v6{ sizeXYZ.x, sizeXYZ.y, -sizeXYZ.z ,  Color.x, Color.y, Color.z };
     Vertex v7{ -sizeXYZ.x, sizeXYZ.y, -sizeXYZ.z , Color.x, Color.y, Color.z };
 
-    glm::vec3 baryCoords = calculateBarycentricCoordinates(pointPosition, glm::vec3(v3.x, v3.y, v3.z), glm::vec3(v2.x, v2.y, v2.z), glm::vec3(v6.x, v6.y, v6.z));
-    glm::vec3 baryCoords2 = calculateBarycentricCoordinates(pointPosition, glm::vec3(v7.x, v7.y, v7.z), glm::vec3(v2.x, v2.y, v2.z), glm::vec3(v3.x, v3.y, v3.z));
+    glm::vec<3, float> baryCoords = calculateBarycentricCoordinates(PointPosition, glm::vec3(v3.x, v3.y, v3.z), glm::vec3(v2.x, v2.y, v2.z), glm::vec3(v6.x, v6.y, v6.z));
+    glm::vec<3, float> baryCoords2 = calculateBarycentricCoordinates(PointPosition, glm::vec3(v7.x, v7.y, v7.z), glm::vec3(v2.x, v2.y, v2.z), glm::vec3(v3.x, v3.y, v3.z));
 
-    float newHeight = v3.y * baryCoords.x + v2.y * baryCoords.y + v6.y * baryCoords.z;
-    float newHeight2 = v7.y * baryCoords2.x + v2.y * baryCoords2.y + v3.y * baryCoords2.z;
+    float heightV3 = v3.y * baryCoords.x + v2.y * baryCoords.y + v6.y * (1.0 - baryCoords.x - baryCoords.y);
+    float heightV2 = v7.y * baryCoords2.x + v2.y * baryCoords2.y + v3.y * (1.0 - baryCoords2.x - baryCoords2.y);
+    float heightV6 = v3.y * (1.0 - baryCoords.x - baryCoords.y) + v2.y * baryCoords.x + v7.y * baryCoords.y;
 
-
-    v2.y = newHeight2;
-    v7.y = newHeight2;
-    std::cout << "New Height 1: " << newHeight << std::endl;
-    std::cout << "New Height 2: " << newHeight2 << std::endl;
+    v3.y = heightV3;
+    v2.y = heightV2;
+    v6.y = heightV6;
+    currentBaryPosition.x = baryCoords.x;
+    currentBaryPosition.y = baryCoords.y;
+    currentBaryPosition.z = baryCoords.z;
+    std::cout << "x: " << heightV2 << std::endl;
+    std::cout << "y: " << baryCoords.y << std::endl;
+    std::cout << "z: " << baryCoords.z << std::endl;
+    //v7.y = newHeight2;
     PlaneArray[0] = v3;
     PlaneArray[1] = v2;
     PlaneArray[2] = v6;
-    PlaneArray[3] = v6;
+  /*  PlaneArray[3] = v6;
     PlaneArray[4] = v7;
-    PlaneArray[5] = v3;
+    PlaneArray[5] = v3;*/
 
     return PlaneArray;
 }
 
 glm::vec3 Construct::calculateBarycentricCoordinates(const glm::vec3& point, const glm::vec3& v0,const glm::vec3& v1,const glm::vec3& v2)
 {
-    glm::vec<3,float> u = v1 - v0;
-    glm::vec<3, float> v = v2 - v0;
-    glm::vec<3, float> w = point - v0;
+    glm::vec<3, float> u = v0 - point;
+    glm::vec<3, float> v = v1 - point;
+    glm::vec<3, float> w = v2 - point;
+   /* glm::vec3 area;
+    area = v1 * v2;*/
+    std::cout << "u: " << u.y << std::endl;
+    std::cout << "v: " << v.y << std::endl;
+    std::cout << "w: " << w.y << std::endl;
+    glm::vec3 area = glm::cross(v1 - v0, v2 - v0);
+
+    //float determinant = u.x * v.y - u.y * v.x;
     
-    float determinant = u.x * v.y - u.y * v.x;
-    if (determinant == 0) {
+    if (area.y == 0) {
         //error
+        std::cout << area.y << std::endl;
+        std::cout << "ERROR" << std::endl;
         return glm::vec3(0.0f);
     }
-
-    float a = (w.x * v.y - w.y * v.x) / determinant;
-    float b = (u.x * w.y - u.y * w.x) / determinant;
+    glm::vec3 uv = glm::cross(u, v);
+    glm::vec3 vw = glm::cross(v, w);
+    float a = glm::dot(uv, vw) / glm::dot(area, area);
+    float b = glm::dot(vw, glm::cross(u, w)) / glm::dot(area, area);
     float c = 1.0f - a - b;
 
+    
     return glm::vec3(a, b, c);
+}
+
+glm::vec3 Construct::GetCurrentBaryPosition()
+{
+    return currentBaryPosition;
 }
 
