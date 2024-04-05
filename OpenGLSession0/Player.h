@@ -46,7 +46,7 @@ std::array<Vertex, 48> mHouseVertecies;
 	VAO VAO5;
 	VBO VBO1;
 	Construct con;
-
+	std::array<glm::vec3, 4> planePoints;
 	
 	
 	Player(float scale, const glm::vec3& initialPosition, float red = 1.0f, float green = 1.0f, float blue = 1.0f, float figure = 1.f)
@@ -95,7 +95,7 @@ std::array<Vertex, 48> mHouseVertecies;
 		}
 		else if (figure == 4) {
 
-			PointPosition = glm::vec3(2.6f, -6.0f, 0.5f);
+			PointPosition = glm::vec3(10.0f, 0.0f, 0.0f);
 			mPlaneVertecies = con.Plane(glm::vec3(red, green, blue), PointPosition);
 
 			VAO5.Bind();
@@ -105,6 +105,11 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
+			planePoints[0] = glm::vec3(-scale, scale, scale);
+			planePoints[1] = glm::vec3(scale, scale * 1.5, scale);
+			planePoints[2] = glm::vec3(scale, scale * 1.5, -scale);
+			planePoints[3] = glm::vec3(-scale, scale, -scale);
+
 		}
 		else
 		{
@@ -146,6 +151,7 @@ std::array<Vertex, 48> mHouseVertecies;
 
 
 	void flattenVertices();
+	glm::vec3 calculateBarycentricCoordinates(glm::vec3& point, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);
 
 public:
 	float a{ 1.0f };

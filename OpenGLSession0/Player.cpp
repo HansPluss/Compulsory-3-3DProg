@@ -187,8 +187,8 @@ void Player::Patrol(std::vector<double> coefficients)
 		for (Vertex& vertex : mVertecies) {
 			position.x += xspeed / 2;
 			position.y += 0;
-			if (xPositiveDir) position.z += Derivative;
-			else position.z -= Derivative;
+			if (xPositiveDir) position.y += Derivative;
+			else position.y -= Derivative;
 		}
 		xvalue += xspeed;
 		if (xvalue >= 1) {
@@ -213,4 +213,44 @@ void Player::flattenVertices()
 	//	flattenedVertices.push_back(vertex.g);
 	//	flattenedVertices.push_back(vertex.b);
 	//}
+}
+
+glm::vec3 Player::calculateBarycentricCoordinates(glm::vec3& point, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
+{
+
+		glm::vec3 v0v1(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
+		glm::vec3 v0v2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
+		glm::vec3 v0p(point.x - v0.x, point.y - v0.y, point.z - v0.z);
+
+		// Compute dot products
+		float dot00 = glm::dot(v0v1, v0v1);
+		float dot01 = glm::dot(v0v1, v0v2);
+		float dot02 = glm::dot(v0v1, v0p);
+		float dot11 = glm::dot(v0v2, v0v2);
+		float dot12 = glm::dot(v0v2, v0p);
+
+		// Compute barycentric coordinates
+		float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+		float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+		float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+		float w = 1 - u - v;
+		if (u > 0 && v > 0 && w > 0) {
+			float heightV6 = v0.y * w + v1.y * u + v2.y * v;
+			point.y = heightV6 - abs(-27 + 2); // -27 is planePosition.y + 2, offset to have player above 
+			//std::cout << "Collision " << u << std::endl;
+		}
+
+		else {
+			//std::cout << "x: " << u << std::endl;
+			//std::cout << "y: " << v << std::endl;
+			//std::cout << "z: " << w << std::endl;
+		}
+
+
+
+
+		return glm::vec3(u, v, w);
+
+
+	
 }
