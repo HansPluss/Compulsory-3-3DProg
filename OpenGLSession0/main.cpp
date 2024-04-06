@@ -10,8 +10,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib> 
 #include <ctime> 
+#include<stb/stb_image.h>
 
-
+#include "Texture.h"
 #include "Resources/Shaders/shaderClass.h"
 #include "Resources/Shaders/VAO.h"
 #include "Resources/Shaders/VBO.h"
@@ -22,12 +23,14 @@
 #include "LSM.h"
 #include "SphereCollition.h"
 
+#include<filesystem>
+
 
 
 const unsigned int width = 800;
 const unsigned int height = 800;
 using namespace std;
-
+namespace fs = filesystem;
 void processInput(GLFWwindow* window);
 
 
@@ -79,7 +82,8 @@ int main()
 	int score = 0;
 	float scale = -7;
 
-
+	
+	
 
 	//creating our objects in the scene
 	for (int i = 0; i < maxPokals; ++i) {
@@ -102,7 +106,7 @@ int main()
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 	float scaleValue = 100.0f;
 	
-
+	
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 
@@ -114,7 +118,39 @@ int main()
 	//speed of cube
 	float translationSpeed = 0.05f;
 	
+	//std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+	//std::string texPath = "/Resources/Textures/";
 
+	//// Texture
+	//Texture brickTex((parentDir + texPath + "brick.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	//brickTex.texUnit(shaderProgram, "tex0", 0);
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	// load and generate the texture
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("brick.png", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+	stbi_set_flip_vertically_on_load(true);
+	//shaderProgram.Activate();
+	shaderProgram.setInt("tex0", 0);
+	//std::cout << parentDir + texPath + "brick.png" << endl;
 
 	std::vector<double> patrolPoints = { -1 , 2, 1, -2, 2, 2 }; // points for patrolling
 	LSM PatrolPath(patrolPoints, 2); // the degree of the function, f.exa x^2
@@ -141,6 +177,9 @@ int main()
 		//Set render distance and FOV
 		glm::mat4 viewproj= camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, myPlayer.position);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj*model));
@@ -148,18 +187,20 @@ int main()
 		myPlayer.GetVBO().Bind();
 		glDrawArrays(GL_TRIANGLES, 0, myPlayer.mVertecies.size());
 		myPlayer.UnbindVAO();
-
+		
 		//collision for player for plane
 		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2]);
 		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0]);
 		//collision for player for plane
 		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2]);
 		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0]);
-
+		
+		//brickTex.Bind();
 		glm::mat4 FloorModel = glm::mat4(1.0f);
 		FloorModel = glm::translate(FloorModel, floor.position);
 		FloorModel = glm::scale(FloorModel, glm::vec3(20.0f,20.f,20.0f));
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj * FloorModel));
+		
 		floor.BindVAO();
 		glDrawArrays(GL_TRIANGLES, 0, floor.mVertecies.size());
 		floor.UnbindVAO();
@@ -170,13 +211,14 @@ int main()
 		glm::mat4 NPCmodel = glm::mat4(1.0f);
 		NPCmodel = glm::translate(NPCmodel, AI.position);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj * NPCmodel));
+		
 		AI.BindVAO();
 		AI.GetVBO().Bind();
 		glDrawArrays(GL_TRIANGLES, 0, AI.mVertecies.size());
 		AI.UnbindVAO();
+		
 
-
-
+		
 		
 		
 		// Swap the back buffer with the front buffer

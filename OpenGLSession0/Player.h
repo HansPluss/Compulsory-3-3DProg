@@ -63,8 +63,10 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.Bind();
 			VBO1.Bind();
 			glBufferData(GL_ARRAY_BUFFER, mVertecies.size() * sizeof(Vertex), mVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		
 			VAO5.Unbind();
 			VBO1.Unbind();
 		}
@@ -75,8 +77,9 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.Bind();
 			VBO1.Bind();
 			glBufferData(GL_ARRAY_BUFFER, mVertecies.size() * sizeof(Vertex), mVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+			
 			VAO5.Unbind();
 			VBO1.Unbind();
 		}
@@ -90,6 +93,7 @@ std::array<Vertex, 48> mHouseVertecies;
 			glBufferData(GL_ARRAY_BUFFER, mHouseVertecies.size() * sizeof(Vertex), mHouseVertecies.data(), GL_STATIC_DRAW);
 			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
 		}
@@ -101,8 +105,9 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.Bind();
 			VBO1.Bind();
 			glBufferData(GL_ARRAY_BUFFER, mPlaneVertecies.size() * sizeof(Vertex), mPlaneVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
 			planePoints[0] = glm::vec3(-scale, scale, scale);
@@ -118,13 +123,14 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.Bind();
 			VBO1.Bind();
 			glBufferData(GL_ARRAY_BUFFER, mVertecies.size() * sizeof(Vertex), mVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
 		}
 		
-
+		
 		//Table
 		//mVertecies = con.Table(a, initialPosition, glm::vec3(red, green, blue));
 
