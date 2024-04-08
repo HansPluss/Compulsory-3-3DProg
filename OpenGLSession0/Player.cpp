@@ -9,26 +9,6 @@ float Player::GetA()
     return a;
 }
 
-//void Player::ConstructVBO(std::vector<GLfloat> flattenedVertices, bool update)
-//{
-//	
-//	
-//
-//	// Update VBO data if necessary
-//	//if (update) {
-//	//	VBO1.UpdateData(flattenedVertices.data(), flattenedVertices.size() * sizeof(GLfloat));
-//	//}
-//	//else {
-//	//	VAO5.Bind();
-//	//	VBO1.UpdateData(flattenedVertices.data(), flattenedVertices.size() * sizeof(GLfloat));
-//	//	VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-//	//	VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-//	//	VAO5.Unbind();
-//	//	VBO1.Unbind();
-//	//}
-//	
-//	
-//}
 
 void Player::DeleteVBOANDVAO()
 {
@@ -97,37 +77,12 @@ void Player::inputs(GLFWwindow* window)
 
 
 
-//std::vector<GLfloat> Player::getFlattenedVertices() const
-//{
-//	std::vector<GLfloat> flattenedVertices;
-//	for (const Vertex& vertex : mVertecies) {
-//		flattenedVertices.push_back((vertex.x * scaleX) + position.x);
-//		flattenedVertices.push_back((vertex.y * scaleY) + position.y);
-//		flattenedVertices.push_back((vertex.z * scaleZ) + position.z);
-//		flattenedVertices.push_back(vertex.r);
-//		flattenedVertices.push_back(vertex.g);
-//		flattenedVertices.push_back(vertex.b);
-//	}
-//
-//	return flattenedVertices;
-//}
+
 
 bool Player::CheckCollision( Player& otherCube)
 {
 	float distance_centers = glm::length(position - otherCube.position);
-		/*
-		std::sqrt(std::pow(position.x - otherCube.position.x, 2) +
-		std::pow(position.y - otherCube.position.y, 2) +
-		std::pow(position.z - otherCube.position.z, 2));
-	float dx = std::abs(position.x - otherCube.position.x);
-	float dy = std::abs(position.y - otherCube.position.y);
-	float dz = std::abs(position.z - otherCube.position.z);
-	*/
-	//cout << distance_centers << endl;
-	//cout << "Cube1 pos " << position.x << " " << position.y << " " << position.z << endl;
-	//cout << "Cube2 pos " << otherCube.position.x << " " << otherCube.position.y << " " << otherCube.position.z << endl;
-
-	// If the distance between centers is less than the sum of the radii, collision occurs
+		
 	if (distance_centers <= (sphere_radius + otherCube.sphere_radius)) {
 
 		float minimuntranslation = sphere_radius +otherCube.sphere_radius - distance_centers;
@@ -202,55 +157,59 @@ void Player::Patrol(std::vector<double> coefficients)
 	//}
 }
 
-void Player::flattenVertices()
-{
-	//std::vector<GLfloat> flattenedVertices;
-	//for (const Vertex& vertex : mVertecies) {
-	//	flattenedVertices.push_back(vertex.x);
-	//	flattenedVertices.push_back(vertex.y);
-	//	flattenedVertices.push_back(vertex.z);
-	//	flattenedVertices.push_back(vertex.r);
-	//	flattenedVertices.push_back(vertex.g);
-	//	flattenedVertices.push_back(vertex.b);
-	//}
-}
 
-glm::vec3 Player::calculateBarycentricCoordinates(glm::vec3& point, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
+
+glm::vec3 Player::calculateBarycentricCoordinates(glm::vec3& cpoint, glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, bool climbable)
 {
 
-		glm::vec3 v0v1(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
-		glm::vec3 v0v2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
-		glm::vec3 v0p(point.x - v0.x, point.y - v0.y, point.z - v0.z);
+	glm::vec3 point = cpoint;
 
-		// Compute dot products
-		float dot00 = glm::dot(v0v1, v0v1);
-		float dot01 = glm::dot(v0v1, v0v2);
-		float dot02 = glm::dot(v0v1, v0p);
-		float dot11 = glm::dot(v0v2, v0v2);
-		float dot12 = glm::dot(v0v2, v0p);
+	if (!climbable)
+	{
+		planePoints[0] = glm::vec3(-1, 1, 1) + position;
+		planePoints[1] = glm::vec3(1, 1, 1) + position;
+		planePoints[2] = glm::vec3(1, 1, -1) + position;
+		planePoints[3] = glm::vec3(-1, 1, -1) + position;
+		v0.y = 0;
+		v1.y = 0;
+		v2.y = 0;
+		point.y = 0;
 
-		// Compute barycentric coordinates
-		float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-		float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-		float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-		float w = 1 - u - v;
-		if (u > 0 && v > 0 && w > 0) {
+
+	}
+
+
+	glm::vec3 v0v1(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
+	glm::vec3 v0v2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
+	glm::vec3 v0p(point.x - v0.x, point.y - v0.y, point.z - v0.z);
+
+	// Compute dot products
+	float dot00 = glm::dot(v0v1, v0v1);
+	float dot01 = glm::dot(v0v1, v0v2);
+	float dot02 = glm::dot(v0v1, v0p);
+	float dot11 = glm::dot(v0v2, v0v2);
+	float dot12 = glm::dot(v0v2, v0p);
+
+	// Compute barycentric coordinates
+	float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+	float w = 1 - u - v;
+	if (u > 0 && v > 0 && w > 0) {
+		if (climbable)
+		{
 			float heightV6 = v0.y * w + v1.y * u + v2.y * v;
-			point.y = heightV6 - abs(-27 + 2); // -27 is planePosition.y + 2, offset to have player above 
+			cpoint.y = heightV6 + 1; // -19 is planePosition.y -2, offset to have player above 
 			//std::cout << "Collision " << u << std::endl;
 		}
-
-		else {
-			//std::cout << "x: " << u << std::endl;
-			//std::cout << "y: " << v << std::endl;
-			//std::cout << "z: " << w << std::endl;
+		else
+		{
+			cpoint.y += 2;
+			std::cout << "Collision " << u << std::endl;
 		}
+	}
 
-
-
-
-		return glm::vec3(u, v, w);
-
+	return glm::vec3(u, v, w);
 
 	
 }

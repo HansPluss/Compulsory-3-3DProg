@@ -10,9 +10,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib> 
 #include <ctime> 
-#include<stb/stb_image.h>
+#include <stb/stb_image.h>
 
-#include "Texture.h"
 #include "Resources/Shaders/shaderClass.h"
 #include "Resources/Shaders/VAO.h"
 #include "Resources/Shaders/VBO.h"
@@ -30,7 +29,7 @@
 const unsigned int width = 800;
 const unsigned int height = 800;
 using namespace std;
-namespace fs = filesystem;
+
 void processInput(GLFWwindow* window);
 
 
@@ -72,30 +71,13 @@ int main()
 
 	
 	
-	std::vector<Player> myPokaler;
+	
 	std::srand(static_cast<unsigned>(std::time(nullptr)));
-	float maxX = 18;
-	float minX = -18;
-	float maxZ = 18;
-	float minZ = -18;
-	const int maxPokals = 8;
-	int score = 0;
-	float scale = -7;
-
 	
-	
-
-	//creating our objects in the scene
-	for (int i = 0; i < maxPokals; ++i) {
-		float randomX = static_cast<float>(std::rand()) / RAND_MAX * (maxX - minX) + minX;
-		float randomZ = static_cast<float>(std::rand()) / RAND_MAX * (maxZ - minZ) + minZ;
-		Player pokal(1.0f, glm::vec3(randomX, -16.0f, randomZ), 0.75f, 1.0f, 0.0f);
-		myPokaler.push_back(pokal);
-	}
 
 	Player myPlayer(1.0f, glm::vec3(0,0,20), 0.1f, 0.0f, 0.5f, 1);
 
-	Player floor(20.0f, glm::vec3(0, -27, 0), 0.1f, 0.8f, 0.9f, 4);
+	Player floor(20.0f, glm::vec3(5, -27, -10), 0.1f, 0.8f, 0.9f, 4);
 	
 	Player AI(1.0f, glm::vec3(0, 0, -5), 0.1f, 0.5f, 0.0f, 1);
 
@@ -189,12 +171,14 @@ int main()
 		myPlayer.UnbindVAO();
 		
 		//collision for player for plane
-		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2]);
-		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0]);
+		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2],true);
+		floor.calculateBarycentricCoordinates(myPlayer.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0],true);
 		//collision for player for plane
-		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2]);
-		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0]);
+		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2],true);
+		floor.calculateBarycentricCoordinates(AI.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0],true);
 		
+		AI.calculateBarycentricCoordinates(myPlayer.position, AI.planePoints[0], AI.planePoints[1], AI.planePoints[2],false);
+		AI.calculateBarycentricCoordinates(myPlayer.position, AI.planePoints[2], AI.planePoints[3], AI.planePoints[0],false);
 		//brickTex.Bind();
 		glm::mat4 FloorModel = glm::mat4(1.0f);
 		FloorModel = glm::translate(FloorModel, floor.position);
@@ -204,9 +188,7 @@ int main()
 		floor.BindVAO();
 		glDrawArrays(GL_TRIANGLES, 0, floor.mVertecies.size());
 		floor.UnbindVAO();
-
-		// Drawing trophies
-		glm::mat4 PokalModel[maxPokals];
+		
 
 		glm::mat4 NPCmodel = glm::mat4(1.0f);
 		NPCmodel = glm::translate(NPCmodel, AI.position);

@@ -69,6 +69,10 @@ std::array<Vertex, 48> mHouseVertecies;
 		
 			VAO5.Unbind();
 			VBO1.Unbind();
+			planePoints[0] = glm::vec3(scale, -scale, scale) + position;
+			planePoints[1] = glm::vec3(scale, scale, scale) + position;
+			planePoints[2] = glm::vec3(scale, scale, -scale) + position;
+			planePoints[3] = glm::vec3(-scale, scale, -scale) + position;
 		}
 		else if (figure == 2)
 		{
@@ -110,10 +114,10 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
-			planePoints[0] = glm::vec3(-scale, scale, scale);
-			planePoints[1] = glm::vec3(scale, scale * 1.5, scale);
-			planePoints[2] = glm::vec3(scale, scale * 1.5, -scale);
-			planePoints[3] = glm::vec3(-scale, scale, -scale);
+			planePoints[0] = glm::vec3(-scale, scale, scale) + position;
+			planePoints[1] = glm::vec3(scale, scale * 1.5, scale) + position;
+			planePoints[2] = glm::vec3(scale, scale * 1.5, -scale) + position;
+			planePoints[3] = glm::vec3(-scale, scale, -scale) + position;
 
 		}
 		else
@@ -128,6 +132,10 @@ std::array<Vertex, 48> mHouseVertecies;
 			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 			VAO5.Unbind();
 			VBO1.Unbind();
+			planePoints[0] = glm::vec3(-scale, -scale, -scale) + position;
+			planePoints[1] = glm::vec3(scale, -scale, -scale) + position;
+			planePoints[2] = glm::vec3(scale, -scale, scale) + position;
+			planePoints[3] = glm::vec3(-scale, -scale, scale) + position;
 		}
 		
 		
@@ -157,7 +165,7 @@ std::array<Vertex, 48> mHouseVertecies;
 
 
 	void flattenVertices();
-	glm::vec3 calculateBarycentricCoordinates(glm::vec3& point, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);
+	glm::vec3 calculateBarycentricCoordinates(glm::vec3& cpoint, glm::vec3 v0,glm::vec3 v1, glm::vec3 v2, bool climbable);
 
 public:
 	float a{ 1.0f };

@@ -143,6 +143,7 @@
     <ClCompile Include="Resources\Shaders\VAO.cpp" />
     <ClCompile Include="Resources\Shaders\VBO.cpp" />
     <ClCompile Include="SphereCollition.cpp" />
+    <ClCompile Include="stb.cpp" />
     <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="Dependencies\includes\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\includes\glm\vector_relational.hpp" />
     <ClInclude Include="Dependencies\includes\KHR\khrplatform.h" />
+    <ClInclude Include="Dependencies\includes\stb\stb_image.h" />
     <ClInclude Include="LSM.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pokal.h" />
@@ -200,6 +202,9 @@
     <Text Include="grahdata.txt" />
     <Text Include="grahTwoVardata.txt" />
     <Text Include="spiraldata.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="brick.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

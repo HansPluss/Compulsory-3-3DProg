@@ -22,5 +22,6 @@ public:
 	void Activate();
 	// Deletes the Shader Program
 	void Delete();
+	void setInt(const std::string& name, int value) const;
 };
 #endif
