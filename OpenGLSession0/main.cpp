@@ -26,8 +26,8 @@
 
 
 
-const unsigned int width = 800;
-const unsigned int height = 800;
+const unsigned int width = 1366;
+const unsigned int height = 1080;
 using namespace std;
 
 void processInput(GLFWwindow* window);
@@ -81,7 +81,7 @@ int main()
 	
 	Player AI(1.0f, glm::vec3(0, 0, -5), 0.1f, 0.5f, 0.0f, 1);
 
-	
+	Player Object(1.0f, glm::vec3(0, -2, -5), 0.6f, 0.5f, 0.1f, 1);
 	// Unbind all to prevent accidentally modifying them
 	
 	
@@ -134,8 +134,8 @@ int main()
 	shaderProgram.setInt("tex0", 0);
 	//std::cout << parentDir + texPath + "brick.png" << endl;
 
-	std::vector<double> patrolPoints = { -1 , 2, 1, -2, 2, 2 }; // points for patrolling
-	LSM PatrolPath(patrolPoints, 2); // the degree of the function, f.exa x^2
+	std::vector<double> patrolPoints = { -2 , 2, 1, -2, 3, 2 }; // points for patrolling
+	LSM PatrolPath(patrolPoints, 3); // the degree of the function, f.exa x^2
 
 	//SphereCollition sc(myPlayer, NPC);
 	glfwSwapInterval(1);
@@ -179,6 +179,12 @@ int main()
 		
 		AI.calculateBarycentricCoordinates(myPlayer.position, AI.planePoints[0], AI.planePoints[1], AI.planePoints[2],false);
 		AI.calculateBarycentricCoordinates(myPlayer.position, AI.planePoints[2], AI.planePoints[3], AI.planePoints[0],false);
+
+		Object.calculateBarycentricCoordinates(myPlayer.position, Object.planePoints[0], Object.planePoints[1], Object.planePoints[2], false);
+		Object.calculateBarycentricCoordinates(myPlayer.position, Object.planePoints[2], Object.planePoints[3], Object.planePoints[0], false);
+
+		Object.calculateBarycentricCoordinates(AI.position, Object.planePoints[0], Object.planePoints[1], Object.planePoints[2], false);
+		Object.calculateBarycentricCoordinates(AI.position, Object.planePoints[2], Object.planePoints[3], Object.planePoints[0], false);
 		//brickTex.Bind();
 		glm::mat4 FloorModel = glm::mat4(1.0f);
 		FloorModel = glm::translate(FloorModel, floor.position);
@@ -188,8 +194,14 @@ int main()
 		floor.BindVAO();
 		glDrawArrays(GL_TRIANGLES, 0, floor.mVertecies.size());
 		floor.UnbindVAO();
-		
 
+		
+		if (myPlayer.fuel < 100) {
+			myPlayer.fuel += 1.0f / 100.0f;
+			std::cout << myPlayer.fuel << " - Current fuel level!" << endl;
+
+		}
+		
 		glm::mat4 NPCmodel = glm::mat4(1.0f);
 		NPCmodel = glm::translate(NPCmodel, AI.position);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj * NPCmodel));
@@ -198,9 +210,15 @@ int main()
 		AI.GetVBO().Bind();
 		glDrawArrays(GL_TRIANGLES, 0, AI.mVertecies.size());
 		AI.UnbindVAO();
-		
+		camera.Position.x = myPlayer.position.x;
 
-		
+		glm::mat4 Objectmodel = glm::mat4(1.0f);
+		Objectmodel = glm::translate(Objectmodel, Object.position);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj * Objectmodel));
+		Object.BindVAO();
+		Object.GetVBO().Bind();
+		glDrawArrays(GL_TRIANGLES, 0,Object.mVertecies.size());
+		Object.UnbindVAO();
 		
 		
 		// Swap the back buffer with the front buffer

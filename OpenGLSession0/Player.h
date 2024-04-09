@@ -41,7 +41,7 @@ std::array<Vertex, 48> mHouseVertecies;
 	bool left = true;
 	bool right = true;
 	bool move = true; 
-
+	float fuel = 100;
 	
 	VAO VAO5;
 	VBO VBO1;
@@ -76,30 +76,13 @@ std::array<Vertex, 48> mHouseVertecies;
 		}
 		else if (figure == 2)
 		{
-			mVertecies = con.Table(glm::vec3(red, green, blue));
-
-			VAO5.Bind();
-			VBO1.Bind();
-			glBufferData(GL_ARRAY_BUFFER, mVertecies.size() * sizeof(Vertex), mVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 			
-			VAO5.Unbind();
-			VBO1.Unbind();
 		}
 
 		else if (figure == 3)
 		{
-			mHouseVertecies = con.House(glm::vec3(red, green, blue));
-
-			VAO5.Bind();
-			VBO1.Bind();
-			glBufferData(GL_ARRAY_BUFFER, mHouseVertecies.size() * sizeof(Vertex), mHouseVertecies.data(), GL_STATIC_DRAW);
-			VAO5.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-			VAO5.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-			VAO5.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-			VAO5.Unbind();
-			VBO1.Unbind();
+			
+		
 		}
 		else if (figure == 4) {
 
@@ -117,7 +100,7 @@ std::array<Vertex, 48> mHouseVertecies;
 			planePoints[0] = glm::vec3(-scale, scale, scale) + position;
 			planePoints[1] = glm::vec3(scale, scale * 1.5, scale) + position;
 			planePoints[2] = glm::vec3(scale, scale * 1.5, -scale) + position;
-			planePoints[3] = glm::vec3(-scale, scale, -scale) + position;
+			planePoints[3] = glm::vec3(-scale, scale * 2, -scale) + position;
 
 		}
 		else

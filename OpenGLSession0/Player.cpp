@@ -73,6 +73,13 @@ void Player::inputs(GLFWwindow* window)
 		UpdateVertices(speed, 0, 0, glm::vec3(1, 0, 0));
 		//position.x += translationSpeed;
 	}
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fuel > 0 && fuel > 20) {
+
+		UpdateVertices(0, speed * 50, 0, glm::vec3(0, 1, 0));
+		fuel -= 1.0f/20.0f;
+		//position.x += translationSpeed;
+	}
+	
 }
 
 
@@ -141,9 +148,9 @@ void Player::Patrol(std::vector<double> coefficients)
 		double Derivative = computeDerivativeAtPoint(coefficients, xvalue) / 4096;
 		for (Vertex& vertex : mVertecies) {
 			position.x += xspeed / 2;
-			position.y += 0;
-			if (xPositiveDir) position.y += Derivative;
-			else position.y -= Derivative;
+			
+			if (xPositiveDir) position.z += Derivative;
+			else position.z -= Derivative;
 		}
 		xvalue += xspeed;
 		if (xvalue >= 1) {
