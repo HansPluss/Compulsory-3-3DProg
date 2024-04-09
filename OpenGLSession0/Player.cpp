@@ -212,7 +212,7 @@ glm::vec3 Player::calculateBarycentricCoordinates(glm::vec3& cpoint, glm::vec3 v
 		else
 		{
 			cpoint.y += 2;
-			std::cout << "Collision " << u << std::endl;
+			//std::cout << "Collision " << u << std::endl;
 		}
 	}
 

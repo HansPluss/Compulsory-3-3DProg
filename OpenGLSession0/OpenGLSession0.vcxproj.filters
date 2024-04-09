@@ -42,19 +42,10 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pokal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Table.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LSM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Construct.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereCollition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stb.cpp">
@@ -158,22 +149,13 @@
     <ClInclude Include="Dependencies\includes\glm\vector_relational.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pokal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LSM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Construct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\includes\stb\stb_image.h">
@@ -195,9 +177,6 @@
     <Library Include="Dependencies\libs\glfw3dll.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="spiraldata.txt" />
-    <Text Include="grahTwoVardata.txt" />
-    <Text Include="grahdata.txt" />
     <Text Include="Dependencies\includes\glm\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>

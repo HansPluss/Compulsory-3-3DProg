@@ -9,8 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include<GLFW/glfw3.h>
 #include <cmath>
-#include "Table.h"
-#include "Pokal.h"
 #include "Construct.h"
 
 class Pokal;

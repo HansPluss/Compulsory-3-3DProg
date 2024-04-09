@@ -17,10 +17,9 @@
 #include "Resources/Shaders/VBO.h"
 #include "Resources/Shaders/EBO.h"
 #include "Camera.h"
-#include "Pokal.h"
 #include "Player.h"
 #include "LSM.h"
-#include "SphereCollition.h"
+
 
 #include<filesystem>
 
@@ -82,6 +81,8 @@ int main()
 	Player AI(1.0f, glm::vec3(0, 0, -5), 0.1f, 0.5f, 0.0f, 1);
 
 	Player Object(1.0f, glm::vec3(0, -2, -5), 0.6f, 0.5f, 0.1f, 1);
+
+	Player Object2(1.0f, glm::vec3(-4, 1, -10), 0.6f, 0.5f, 0.1f, 1);
 	// Unbind all to prevent accidentally modifying them
 	
 	
@@ -185,6 +186,12 @@ int main()
 
 		Object.calculateBarycentricCoordinates(AI.position, Object.planePoints[0], Object.planePoints[1], Object.planePoints[2], false);
 		Object.calculateBarycentricCoordinates(AI.position, Object.planePoints[2], Object.planePoints[3], Object.planePoints[0], false);
+
+		Object2.calculateBarycentricCoordinates(myPlayer.position, Object2.planePoints[0], Object2.planePoints[1], Object2.planePoints[2], false);
+		Object2.calculateBarycentricCoordinates(myPlayer.position, Object2.planePoints[2], Object2.planePoints[3], Object2.planePoints[0], false);
+
+		floor.calculateBarycentricCoordinates(Object2.position, floor.planePoints[0], floor.planePoints[1], floor.planePoints[2], true);
+		floor.calculateBarycentricCoordinates(Object2.position, floor.planePoints[2], floor.planePoints[3], floor.planePoints[0], true);
 		//brickTex.Bind();
 		glm::mat4 FloorModel = glm::mat4(1.0f);
 		FloorModel = glm::translate(FloorModel, floor.position);
@@ -196,11 +203,6 @@ int main()
 		floor.UnbindVAO();
 
 		
-		if (myPlayer.fuel < 100) {
-			myPlayer.fuel += 1.0f / 100.0f;
-			std::cout << myPlayer.fuel << " - Current fuel level!" << endl;
-
-		}
 		
 		glm::mat4 NPCmodel = glm::mat4(1.0f);
 		NPCmodel = glm::translate(NPCmodel, AI.position);
@@ -220,6 +222,14 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0,Object.mVertecies.size());
 		Object.UnbindVAO();
 		
+		glm::mat4 Objectmodel2 = glm::mat4(1.0f);
+		Objectmodel2 = glm::translate(Objectmodel2, Object2.position);
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "camMatrix"), 1, GL_FALSE, glm::value_ptr(viewproj * Objectmodel2));
+		Object2.BindVAO();
+		Object2.GetVBO().Bind();
+		glDrawArrays(GL_TRIANGLES, 0, Object2.mVertecies.size());
+		Object2.UnbindVAO();
+
 		
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);

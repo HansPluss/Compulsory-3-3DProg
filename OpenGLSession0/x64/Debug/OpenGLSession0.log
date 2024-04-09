@@ -1,8 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Compulsory2Math.vcxproj, OpenGLSession0.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\filesystem(13): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
-C:\Users\hansm\OneDrive\Skrivebord\3DProg\Sessions\Compulsory-3-3D-PROG\Compulsory-3-3DProg\OpenGLSession0\main.cpp(170,59): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\hansm\OneDrive\Skrivebord\3DProg\Sessions\Compulsory-3-3D-PROG\Compulsory-3-3DProg\OpenGLSession0\main.cpp(195,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\hansm\OneDrive\Skrivebord\3DProg\Sessions\Compulsory-3-3D-PROG\Compulsory-3-3DProg\OpenGLSession0\main.cpp(211,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-C:\Users\hansm\OneDrive\Skrivebord\3DProg\Sessions\Compulsory-3-3D-PROG\Compulsory-3-3DProg\OpenGLSession0\main.cpp(220,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  OpenGLSession0.vcxproj -> C:\Users\hansm\OneDrive\Skrivebord\3DProg\Sessions\Compulsory-3-3D-PROG\Compulsory-3-3DProg\x64\Debug\Compulsory3-3DProg.exe
+  The contents of <filesystem> are available only with C++17 or later.
+F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\OpenGLSession0\main.cpp(171,59): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\OpenGLSession0\main.cpp(202,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\OpenGLSession0\main.cpp(213,53): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\OpenGLSession0\main.cpp(222,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\OpenGLSession0\main.cpp(230,58): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  OpenGLSession0.vcxproj -> F:\OpenGLProjects\Compulsory-3-3DProg\Compulsory-3-3DProg\x64\Debug\Compulsory3-3DProg.exe
